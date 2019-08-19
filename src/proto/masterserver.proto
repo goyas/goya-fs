@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package goya.fs;
+
+option cc_generic_services = true;
+
+message CreateFileRequest {
+  optional uint64 sequence_id = 1;
+  optional int32 type = 2;
+  optional string file_name =3;
+}
+
+message CreateFileResponse {
+  optional uint64 sequence_id = 1;
+  optional int32 status = 2;
+}
+
+service MasterServer {
+    rpc CreateFile(CreateFileRequest) returns(CreateFileResponse);
+}
+
+
+

@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package goya.fs;
+
+option cc_generic_services = true;
+
+message WriteBlockRequest {
+  optional uint64 sequence_id = 1;
+  optional int64 block_id = 2;
+}
+
+message WriteBlockResponse {
+  required uint64 sequence_id = 1;
+}
+
+service ChunkServer {
+  rpc WriteBlock(WriteBlockRequest) returns(WriteBlockResponse);
+}
+
+
+
