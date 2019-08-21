@@ -12,12 +12,18 @@ mkdir -p ${DEPS_PREFIX} ${DEPS_SOURCE}
 
 # 1 boost
 pushd $DEPS
-if [ ! -d "${DEPS_PREFIX}/boost_1_57_0/boost" ]; then
+if [ ! -d "${DEPS_PREFIX}/lib/libboost_system.a" ] \
+  || [ ! -f "${DEPS_PREFIX}/include/boost" ]; then
   rm -rf boost_1_57_0
   wget https://raw.githubusercontent.com/lylei9/boost_1_57_0/master/boost_1_57_0.tar.gz
   tar zxvf boost_1_57_0.tar.gz
-  rm -rf ${DEPS_PREFIX}/boost_1_57_0
-  mv boost_1_57_0 ${DEPS_PREFIX}/boost_1_57_0
+  cd boost_1_57_0
+  ./bootstrap.sh --with-libraries=all --with-toolset=gcc
+  ./b2 toolset=gcc
+  ./b2 install --prefix=${DEPS_PREFIX}/
+  sudo ldconfig
+  #rm -rf ${DEPS_PREFIX}/boost_1_57_0
+  #mv boost_1_57_0 ${DEPS_PREFIX}/boost_1_57_0
   rm boost_1_57_0.tar.gz
 fi
 popd
@@ -58,6 +64,10 @@ if [ ! -f "${DEPS_PREFIX}/lib/libgoya-rpc.a" ] \
   rm -rf goya-rpc 
   git clone --depth=1 https://github.com/goyas/goya-rpc.git
   cd goya-rpc
+  deps_prefix_sed=$(echo $DEPS_PREFIX | sed -e 's/\//\\\//g')
+  echo $deps_prefix_sed
+  sed -i "s/\${PROJECT_SOURCE_DIR}/${deps_prefix_sed}/" config.cmake
+  chmod +x ./autobuild.sh
   ./autobuild.sh
 fi
 popd

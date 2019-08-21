@@ -1,25 +1,29 @@
 #include "masterserver_impl.h"
-#include "sofa/pbrpc/pbrpc.h"
+#include "goya/rpc/rpc_server.h"
 
 extern std::string FLAGS_masterserver_port;
 
 int main(int argc, char* argv[]) 
 {
+  if (argc < 2) {
+	printf("Invaild input, please input --port=...\n");
+    return -1;
+  }
   char s[16];
   if (sscanf(argv[1], "--port=%s", s) != 1) {
     printf("Invaild input %s", argv[1]);
-    exit(1);
+    return -1;
   }
   
   FLAGS_masterserver_port = s;
   
-  sofa::pbrpc::RpcServerOptions options;
-  sofa::pbrpc::RpcServer rpc_server(options);
+  //goya::rpc::RpcServerOptions options;
+  goya::rpc::RpcServer rpc_server();
 
   // master service
   goya::fs::MasterServer* masterserver_service = new goya::fs::MasterServerImpl();
 
-  if (!rpc_server.RegisterService(masterserver_service))
+  if (!rpc_server.RegisterService(masterserver_service, false))
     return -1;
 
   // start service
@@ -27,7 +31,7 @@ int main(int argc, char* argv[])
   if (!rpc_server.Start(server_hostname))
     return -1;
 
-  rpc_server.Run();
+  //rpc_server.Run();
 
   return 0;
 }

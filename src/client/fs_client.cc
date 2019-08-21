@@ -6,14 +6,14 @@ using namespace goya::fs;
 
 extern std::string FLAGS_masterserver;
 
-void print_usage() {
+void Usage() {
   printf("Use:\nfs_client <commond> path\n");
   printf("\t commond:\n");
-  printf("\t    -mkdir <path> : make director\n");
-  printf("\t    -ls <path> : list the directory\n");
+  printf("\t mkdir <path> : make director\n");
+  printf("\t ls <path> : list directory\n");
 }
 
-void dump(int argc, char** argv) {
+void Dump(int argc, char** argv) {
   printf("dump\n");
   for (int i = 0; i < argc; ++i) {
     printf("arg[%d]=%s\n", i, argv[i]);
@@ -43,7 +43,7 @@ public:
   
   int Execute() {
     if (argc_ < 3) {
-      print_usage();
+      Usage();
       return -1;
     }
     int ret = 0;
@@ -90,6 +90,11 @@ private:
 };
 
 int main(int argc, char* argv[]) {
+  if (argc < 2) {
+	Usage();
+	return -1;
+  }
+  
   FSCmdFactory* factory = new FSCmdFactory();
   FSOperator* opertator = factory->CreateOpObject(argc, argv);
   if (!opertator) {

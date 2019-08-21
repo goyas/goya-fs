@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(goya VERSION 0.1 LANGUAGES C CXX)
+project(goya-fs VERSION 0.1 LANGUAGES C CXX)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED OFF)
@@ -9,11 +9,12 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+add_definitions("-ggdb3")
 include_directories(src)
 link_directories(${PROJECT_SOURCE_DIR}/thirdparty/install/lib)
 
-add_library(goya "")
-target_sources(goya
+add_library(goya-fs "")
+target_sources(goya-fs
   PRIVATE
     "${PROJECT_SOURCE_DIR}/src/sdk/file_client.h"
     "${PROJECT_SOURCE_DIR}/src/sdk/file_client_impl.h"
@@ -24,7 +25,7 @@ target_sources(goya
     "${PROJECT_SOURCE_DIR}/build/chunkserver.pb.cc"
     "${PROJECT_SOURCE_DIR}/build/chunkserver.pb.h"
 )
-#target_link_libraries(goya ${PROTOBUF_LIBRARIES})
+#target_link_libraries(goya-fs ${PROTOBUF_LIBRARIES})
 
 message(STATUS "*****project binary: " ${PROJECT_BINARY_DIR})
 
@@ -49,14 +50,14 @@ message(STATUS ${protofiles})
 message(STATUS ${PROTOSRCS}, ${PROTOHDRS})
 
 # proto file
-add_library(proto "")
-target_sources(proto
-  PRIVATE
-    "${PROJECT_SOURCE_DIR}/build/masterserver.pb.cc"
-    "${PROJECT_SOURCE_DIR}/build/masterserver.pb.h"
-    "${PROJECT_SOURCE_DIR}/build/chunkserver.pb.cc"
-    "${PROJECT_SOURCE_DIR}/build/chunkserver.pb.h"
-)
+#add_library(proto "")
+#target_sources(proto
+#  PRIVATE
+#    "${PROJECT_SOURCE_DIR}/build/masterserver.pb.cc"
+#    "${PROJECT_SOURCE_DIR}/build/masterserver.pb.h"
+#    "${PROJECT_SOURCE_DIR}/build/chunkserver.pb.cc"
+#    "${PROJECT_SOURCE_DIR}/build/chunkserver.pb.h"
+#)
 
 # master server
 add_executable(masterserver "")
@@ -69,7 +70,8 @@ target_sources(masterserver
     "${PROJECT_SOURCE_DIR}/build/masterserver.pb.h"
     "${PROJECT_SOURCE_DIR}/src/common/flags.cc"
 )
-target_link_libraries(masterserver ${PROTOBUF_LIBRARIES} leveldb sofa-pbrpc z snappy) 
+#target_link_libraries(masterserver ${PROTOBUF_LIBRARIES} leveldb goya-rpc z snappy) 
+target_link_libraries(masterserver ${PROTOBUF_LIBRARIES} leveldb goya-rpc z snappy libboost_signals.a libboost_system.a) 
 message(STATUS "*****protobuf libs: " ${PROTOBUF_LIBRARIES})
 
 # chunk server
@@ -90,5 +92,7 @@ target_sources(fs_client
     "${PROJECT_SOURCE_DIR}/src/client/fs_client.cc"
     "${PROJECT_SOURCE_DIR}/src/common/flags.cc"
 )
-target_link_libraries(fs_client goya sofa-pbrpc z snappy ${PROTOBUF_LIBRARIES})
+target_link_libraries(fs_client goya-fs sofa-pbrpc z snappy ${PROTOBUF_LIBRARIES} libboost_signals.a libboost_system.a)
 
+set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
