@@ -12,8 +12,8 @@ mkdir -p ${DEPS_PREFIX} ${DEPS_SOURCE}
 
 # 1 boost
 pushd $DEPS
-if [ ! -d "${DEPS_PREFIX}/lib/libboost_system.a" ] \
-  || [ ! -f "${DEPS_PREFIX}/include/boost" ]; then
+if [ ! -f "${DEPS_PREFIX}/lib/libboost_system.a" ] \
+  || [ ! -d "${DEPS_PREFIX}/include/boost" ]; then
   rm -rf boost_1_57_0
   wget https://raw.githubusercontent.com/lylei9/boost_1_57_0/master/boost_1_57_0.tar.gz
   tar zxvf boost_1_57_0.tar.gz
@@ -67,7 +67,6 @@ if [ ! -f "${DEPS_PREFIX}/lib/libgoya-rpc.a" ] \
   deps_prefix_sed=$(echo $DEPS_PREFIX | sed -e 's/\//\\\//g')
   echo $deps_prefix_sed
   sed -i "s/\${PROJECT_SOURCE_DIR}/${deps_prefix_sed}/" config.cmake
-  chmod +x ./autobuild.sh
   ./autobuild.sh
 fi
 popd
