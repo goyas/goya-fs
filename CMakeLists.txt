@@ -71,7 +71,7 @@ target_sources(masterserver
     "${PROJECT_SOURCE_DIR}/src/common/flags.cc"
 )
 #target_link_libraries(masterserver ${PROTOBUF_LIBRARIES} leveldb goya-rpc z snappy) 
-target_link_libraries(masterserver ${PROTOBUF_LIBRARIES} leveldb goya-rpc z snappy libboost_signals.a libboost_system.a) 
+target_link_libraries(masterserver ${PROTOBUF_LIBRARIES} leveldb goya-rpc z libboost_signals.a libboost_system.a) 
 message(STATUS "*****protobuf libs: " ${PROTOBUF_LIBRARIES})
 
 # chunk server
@@ -92,7 +92,7 @@ target_sources(fs_client
     "${PROJECT_SOURCE_DIR}/src/client/fs_client.cc"
     "${PROJECT_SOURCE_DIR}/src/common/flags.cc"
 )
-target_link_libraries(fs_client goya-fs sofa-pbrpc z snappy ${PROTOBUF_LIBRARIES} libboost_signals.a libboost_system.a)
+target_link_libraries(fs_client goya-fs z ${PROTOBUF_LIBRARIES} libboost_signals.a libboost_system.a)
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
