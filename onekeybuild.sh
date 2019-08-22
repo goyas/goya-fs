@@ -66,7 +66,7 @@ if [ ! -f "${DEPS_PREFIX}/lib/libgoya-rpc.a" ] \
   cd goya-rpc
   deps_prefix_sed=$(echo $DEPS_PREFIX | sed -e 's/\//\\\//g')
   echo $deps_prefix_sed
-  sed -i "s/\${PROJECT_SOURCE_DIR}/${deps_prefix_sed}/" config.cmake
+  sed -i "s/\${PROJECT_BINARY_DIR}/${deps_prefix_sed}/" config.cmake
   ./onekeybuild.sh
 fi
 popd
