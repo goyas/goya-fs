@@ -6,9 +6,9 @@
 #include <unistd.h>
 #include "masterserver.pb.h"
 #include "goya/rpc/rpc_channel.h"
+#include "goya/rpc/rpc_controller.h"
 
 namespace goya {
-
 namespace fs {
 
 typedef void(MasterServer_Stub::*Callback)(::google::protobuf::RpcController* controller,
@@ -39,7 +39,8 @@ public:
     return true;
   }
   
-  bool SendRequest(MasterServer_Stub* stub, Callback callback, 
+  bool SendRequest(MasterServer_Stub* stub, 
+    Callback callback, 
     const CreateFileRequest* request, 
     CreateFileResponse* response, 
     int timeout, 
