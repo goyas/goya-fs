@@ -92,7 +92,7 @@ target_sources(fs_client
     "${PROJECT_SOURCE_DIR}/src/client/fs_client.cc"
     "${PROJECT_SOURCE_DIR}/src/common/flags.cc"
 )
-target_link_libraries(fs_client goya-fs z ${PROTOBUF_LIBRARIES} libboost_signals.a libboost_system.a)
+target_link_libraries(fs_client goya-fs goya-rpc z ${PROTOBUF_LIBRARIES} libboost_signals.a libboost_system.a)
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
