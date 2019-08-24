@@ -1,0 +1,9 @@
+syntra = "proto2"
+
+package goya.fs;
+
+message {
+  optional string name;
+  optional int32  type;
+  optional uint32 time;
+}
