@@ -1,7 +1,7 @@
 #ifndef _CHUNKSERVER_IMPL_H_
 #define _CHUNKSERVER_IMPL_H_
 
-#include "chunkserver.pb.h"
+#include "proto/chunkserver.pb.h"
 
 namespace goya {
 

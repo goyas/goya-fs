@@ -4,26 +4,20 @@
 #include <string>
 #include <map>
 #include <unistd.h>
-#include "masterserver.pb.h"
+#include "proto/masterserver.pb.h"
 #include "goya/rpc/rpc_channel.h"
 #include "goya/rpc/rpc_controller.h"
 
 namespace goya {
 namespace fs {
 
-typedef void(MasterServer_Stub::*Callback)(::google::protobuf::RpcController* controller,
-  const CreateFileRequest*, CreateFileResponse*, ::google::protobuf::Closure* done);
-  
-//typedef void(MasterServer_Stub::*Fptr)(google::protobuf::RpcController*, 
-//  const CreateFileRequest*, CreateFileResponse*, Callback*);
+//typedef void(MasterServer_Stub::*Callback)(::google::protobuf::RpcController* controller,
+//  const CreateFileRequest*, CreateFileResponse*, ::google::protobuf::Closure* done);
 
 typedef std::map<std::string, MasterServer_Stub*> ServerMapTypeDef;
 
 class RpcWrapper {
 public:
-  //typedef void(MasterServer_Stub::*Callback)(::google::protobuf::RpcController* controller,
-  //const CreateFileRequest*, CreateFileResponse*, ::google::protobuf::Closure* done);
-  
   bool GetStub(std::string server_addr, MasterServer_Stub*& stub) {
     ServerMapTypeDef::iterator iter = server_map_.find(server_addr);
     if (iter != server_map_.end()) {
@@ -38,16 +32,18 @@ public:
 
     return true;
   }
-  
+
+  template<typename Request, typename Response, typename Callback>
   bool SendRequest(MasterServer_Stub* stub, 
-    Callback callback, 
-    const CreateFileRequest* request, 
-    CreateFileResponse* response, 
+    //Callback callback,
+    void (MasterServer_Stub::*func)(google::protobuf::RpcController*, const Request*, Response*, Callback*),
+    const Request* request, 
+    Response* response, 
     int timeout, 
     int retry_times) {
     goya::rpc::RpcController controller;
     //controller.SetTimeout(timeout);
-    (stub->*callback)(&controller, request, response, nullptr);
+    (stub->*func)(&controller, request, response, nullptr);
     for (int retry = 0; retry < retry_times; ++retry) {
       if (controller.Failed()) {
         printf("Send failed, retry ...\n");

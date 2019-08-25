@@ -4,7 +4,7 @@
 #include <string>
 #include <sys/types.h>
 #include "file_client.h"
-#include "masterserver.pb.h"
+#include "proto/masterserver.pb.h"
 #include "common/rpc_wrapper.h"
 
 namespace goya {
@@ -23,7 +23,7 @@ public:
   virtual ~FileSystemImpl();
   bool StartFileSystem(const char* masterserver);
   int CreateDirectory(char* path);
-  int ListDirectory(char* path);
+  int ListDirectory(char* path, fsFileInfo*& file_info);
   
 private:
   std::string         masterserver_addr_;

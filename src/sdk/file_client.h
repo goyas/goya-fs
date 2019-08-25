@@ -2,8 +2,13 @@
 #define _FILE_CLIENT_H_
 
 namespace goya {
-
 namespace fs {
+
+struct fsFileInfo {
+  std::string filename;
+  uint32_t time;
+  uint32_t mode;
+};
   
 class FileClient {
 public:
@@ -24,7 +29,7 @@ public:
   virtual ~FileSystem() {}
   virtual bool StartFileSystem(const char* masterserver) = 0;
   virtual int CreateDirectory(char* path) = 0;
-  virtual int ListDirectory(char* path) = 0;
+  virtual int ListDirectory(char* path, fsFileInfo*& file_info) = 0;
 
 private:
   // 禁止拷贝复制
@@ -33,7 +38,6 @@ private:
 };
 
 }
-
 }
 
 #endif

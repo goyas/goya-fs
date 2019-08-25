@@ -64,7 +64,33 @@ public:
   virtual ~FSLsdirImpl() {}
   
   int Execute() {
+    if (argc_ < 3) {
+      Usage();
+      return -1;
+    }
     
+    fsFileInfo* files = nullptr;
+    char* path = argv_[2];
+    int ret = fs_.ListDirectory(path, files);
+    if (ret) {
+      fprintf(stderr, "List diretory %s fail\n", path);
+      return ret;
+    }
+    
+    int32_t type = files->mode;
+    time_t  time = files->time;
+    char permission[16] = "drwxrwxrwx";
+    for (int i = 0; i < 10; ++i) {
+      if ((type & (1 << (9 - i))) == 0)
+        permission[i] = '-';
+    }
+    struct tm* tm_s = localtime(&time);
+    char time_buf[64];
+    snprintf(time_buf, sizeof(time_buf), "%4d-%02d-%02d %2d:%02d",
+      tm_s->tm_year + 1900, tm_s->tm_mon + 1, tm_s->tm_mday, tm_s->tm_hour, tm_s->tm_min);
+    printf("%s\t%s %s\n", permission, time_buf, files->filename.c_str());
+
+    return ret;
   }
 };
 
@@ -89,10 +115,11 @@ private:
   FSOperator* operator_;
 };
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) 
+{
   if (argc < 2) {
-	Usage();
-	return -1;
+    Usage();
+    return -1;
   }
   
   FSCmdFactory* factory = new FSCmdFactory();

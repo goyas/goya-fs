@@ -1,9 +1,10 @@
-syntra = "proto2"
+syntax = "proto3";
 
 package goya.fs;
 
-message {
-  optional string name;
-  optional int32  type;
-  optional uint32 time;
-}
+message FileInfoProto {
+  string name = 1;
+  uint32 time = 2;
+  int32  type = 3;
+};
+

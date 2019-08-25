@@ -5,6 +5,7 @@ extern std::string FLAGS_masterserver_port;
 
 int main(int argc, char* argv[]) 
 {
+#if 0
   if (argc < 2) {
     printf("Invaild input, please input --port=...\n");
     return -1;
@@ -16,7 +17,8 @@ int main(int argc, char* argv[])
   }
   
   FLAGS_masterserver_port = s;
-  
+#endif
+
   //goya::rpc::RpcServerOptions options;
   goya::rpc::RpcServer rpc_server;
 
