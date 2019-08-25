@@ -3,14 +3,11 @@
 
 **2 测试**  
 cd build/bin
-
+```
 masterserver:  
-```
 ./masterserver  
-```
 
 client:  
-```
 ./fs_client mkdir /file1
 ./fs_client ls /file1
 ```
